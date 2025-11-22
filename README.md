@@ -29,23 +29,43 @@
 
 ## 🚀 **Installation**
 
-### 1. Clone and Install
+### 1. Clone and Setup Virtual Environment
 ```bash
 git clone https://github.com/BlueberryMathematician/langchain-agent-base.git
 cd langchain-agent-base
-pip install langchain>=1.0.8 langchain-groq groq langchain-huggingface sentence-transformers fastapi uvicorn qdrant-client semver
+
+# Create and activate virtual environment
+python -m venv .venv
+
+# Activate virtual environment
+# On Windows:
+.venv\Scripts\activate
+# On macOS/Linux:
+source .venv/bin/activate
 ```
 
-### 2. Set API Key
+### 2. Install Dependencies
+```bash
+# Install all dependencies from pyproject.toml
+pip install -e .
+
+# Or install with development dependencies
+pip install -e ".[dev]"
+```
+
+### 3. Set API Key
 ```bash
 export GROQ_API_KEY="your_groq_api_key_here"
 # Get free API key: https://console.groq.com/
 ```
 
-### 3. Copy to Your Project
+### 4. Copy to Your Project (Optional)
 ```bash
-# Copy the src/ folder to your project
+# Copy the src/ folder to your existing project
 cp -r src/ /path/to/your/project/src/
+
+# Or use as a package dependency
+pip install git+https://github.com/BlueberryMathematician/langchain-agent-base.git
 ```
 
 ## 💫 **Basic Usage Examples**
