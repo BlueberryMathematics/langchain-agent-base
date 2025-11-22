@@ -12,6 +12,42 @@ The LangChain Agent Base now includes a comprehensive unified storage and memory
 
 All powered by **Qdrant vector database** for scalable, production-ready performance.
 
+### System Architecture
+
+```mermaid
+graph TB
+    subgraph "Agent Layer"
+        A[Agent with Memory] --> B[ConversationMemoryManager]
+        A --> C[RAG Tools]
+    end
+    
+    subgraph "Memory System"
+        B --> D[UnifiedQdrantStorage]
+        D --> E[ConversationStorage]
+        D --> F[AgentCardStorage]
+        D --> G[RAGDocumentStorage]
+    end
+    
+    subgraph "Storage Layer"
+        E --> H[Qdrant: conversations]
+        F --> I[Qdrant: agent_cards]
+        G --> J[Qdrant: documents]
+    end
+    
+    subgraph "Features"
+        K[Smart Compression] --> B
+        L[Temporal Search] --> E
+        M[Semantic Search] --> H
+        M --> I
+        M --> J
+        N[Cross-System RAG] --> D
+    end
+    
+    C --> G
+    O[HuggingFace Embeddings] --> D
+    P[Session Management] --> B
+```
+
 ## 🚀 Quick Start
 
 ### Enable Memory in Any Agent

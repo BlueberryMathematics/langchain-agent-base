@@ -42,6 +42,38 @@ print(response)  # Mathematical computation
 
 ## 🏗️ Agent Building Patterns
 
+### Agent Creation Flow
+
+```mermaid
+graph TD
+    subgraph "Creation Methods"
+        A[Factory Functions] --> D[Agent Instance]
+        B[Protocol Registration] --> D
+        C[Direct Instantiation] --> D
+    end
+    
+    subgraph "Configuration Options"
+        E[System Prompt] --> D
+        F[Tool Selection] --> D
+        G[Memory Settings] --> D
+        H[Command System] --> D
+    end
+    
+    subgraph "Enhancement Features"
+        D --> I[Add Custom Tools]
+        D --> J[Enable Commands]
+        D --> K[Add Memory]
+        D --> L[Register with Protocol]
+    end
+    
+    subgraph "Deployment Options"
+        L --> M[REST API]
+        L --> N[Discovery System]
+        D --> O[Direct Usage]
+        D --> P[Multi-Agent Systems]
+    end
+```
+
 ### 1. Protocol System (Production-Ready)
 
 Use the protocol system for versioned, API-enabled agents:

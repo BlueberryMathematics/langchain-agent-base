@@ -4,6 +4,43 @@ Learn how to create and integrate custom tools into your agents. Tools are the p
 
 ## 🛠️ Tool Basics
 
+### Tool Integration Architecture
+
+```mermaid
+graph TB
+    subgraph "Tool Creation"
+        A[@tool Decorator] --> B[Function Definition]
+        B --> C[Type Hints & Docstring]
+        C --> D[Error Handling]
+    end
+    
+    subgraph "Tool Categories"
+        E[Math Tools] --> I[Tool Registry]
+        F[Science Tools] --> I
+        G[Coding Tools] --> I
+        H[Custom Tools] --> I
+    end
+    
+    subgraph "Agent Integration"
+        I --> J[agent.add_tool()]
+        I --> K[agent.add_tools()]
+        J --> L[Agent Rebuild]
+        K --> L
+    end
+    
+    subgraph "Execution Methods"
+        L --> M[Chat Interface]
+        L --> N[Command System]
+        L --> O[Direct Execution]
+    end
+    
+    subgraph "Discovery & API"
+        I --> P[Auto-Discovery]
+        P --> Q[Protocol Registration]
+        Q --> R[REST API Endpoints]
+    end
+```
+
 ### The @tool Decorator
 
 All tools use LangChain's `@tool` decorator:

@@ -2,6 +2,41 @@
 
 Complete reference for all classes, methods, and functions in the LangChain Agent Base.
 
+## System Overview
+
+```mermaid
+graph TB
+    subgraph "Core Classes"
+        A[Agent] --> B[HITLAgent]
+        C[AgentCard] --> D[AgentRegistry]
+        E[ConversationMemoryManager] --> F[UnifiedQdrantStorage]
+    end
+    
+    subgraph "Protocol System"
+        G[@register_agent] --> D
+        H[AgentProtocolServer] --> I[FastAPI App]
+        D --> H
+    end
+    
+    subgraph "Storage Classes"
+        F --> J[AgentCardStorage]
+        F --> K[ConversationMemoryStorage]
+        F --> L[RAGDocumentStorage]
+    end
+    
+    subgraph "Discovery & Tools"
+        M[DiscoveryEngine] --> N[ToolInfo]
+        M --> O[CommandInfo]
+        P[CommandRegistry] --> Q[@command]
+        R[@tool] --> S[Tool Functions]
+    end
+    
+    subgraph "RAG System"
+        T[RAGManager] --> U[URLCollectionManager]
+        T --> F
+    end
+```
+
 ## Core Classes
 
 ### Agent

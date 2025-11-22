@@ -6,6 +6,42 @@ Advanced patterns and techniques for building sophisticated AI agent systems.
 
 Coordinate multiple specialized agents to handle complex, multi-step tasks.
 
+### Multi-Agent Architecture
+
+```mermaid
+graph TB
+    subgraph "Multi-Agent Coordination"
+        A[Supervisor Agent] --> B[Math Specialist]
+        A --> C[Science Specialist]
+        A --> D[Coding Specialist]
+        A --> E[General Agent]
+    end
+    
+    subgraph "Shared Resources"
+        F[Unified Memory] --> A
+        F --> B
+        F --> C
+        F --> D
+        F --> E
+        G[Protocol Registry] --> A
+    end
+    
+    subgraph "Coordination Patterns"
+        H[Sequential Pipeline] --> I[Task Distribution]
+        J[Parallel Processing] --> I
+        K[Dynamic Routing] --> I
+        I --> L[Result Aggregation]
+    end
+    
+    subgraph "Communication"
+        M[LangGraph StateGraph] --> A
+        N[Message Passing] --> B
+        N --> C
+        N --> D
+        N --> E
+    end
+```
+
 ### Basic Multi-Agent Setup
 
 ```python

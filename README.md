@@ -222,29 +222,155 @@ langchain-agent-base/
 
 ## 🔗 **System Integration & Connections**
 
-### How Everything Works Together
+### Core Framework Architecture (`src/` directory)
 
 ```mermaid
 graph TB
-    A[docs/ - Documentation] --> B[guide/ - Learning]
-    B --> C[examples/ - Production Code]
-    C --> D[src/ - Core Framework]
+    subgraph "Core Agent System"
+        A[base.py] --> B[tools.py]
+        A --> C[commands.py]
+        A --> D[memory.py]
+        D --> E[storage.py]
+    end
     
-    D --> E[base.py - Agent Classes]
-    D --> F[tools.py - 15+ Tools] 
-    D --> G[memory.py - Conversation Memory]
-    D --> H[storage.py - Unified Qdrant]
-    D --> I[protocol.py - Agent Registry]
-    D --> J[server.py - FastAPI Endpoints]
+    subgraph "Protocol & Discovery"
+        F[protocol.py] --> E
+        G[discovery.py] --> F
+        H[server.py] --> F
+        H --> A
+    end
     
-    E --> F
-    E --> G
+    subgraph "RAG System"
+        I[rag.py] --> E
+        I --> A
+    end
+    
+    subgraph "External Dependencies"
+        J[Groq API] --> A
+        K[Qdrant DB] --> E
+        L[LangChain] --> A
+        M[FastAPI] --> H
+    end
+    
+    N[main.py] --> H
+    N --> G
+```
+
+### Documentation System (`docs/` directory)
+
+```mermaid
+graph LR
+    subgraph "Getting Started"
+        A[getting-started.md] --> B[building-agents.md]
+        B --> C[adding-tools.md]
+        C --> D[upgrading-agents.md]
+    end
+    
+    subgraph "Advanced Features"
+        E[memory-and-rag.md] --> F[advanced-usage.md]
+        F --> G[api-reference.md]
+    end
+    
+    subgraph "Reference Materials"
+        H[tool-collections.md] --> I[examples.md]
+        I --> J[contributing.md]
+        J --> K[agent-memory-loop.md]
+    end
+    
+    A --> E
+    D --> F
     G --> H
-    I --> H
-    I --> J
+```
+
+### Learning Resources (`guide/` directory)
+
+```mermaid
+graph TD
+    A["Using LangChain 1.0.ipynb<br/>📚 Educational Tutorial"] --> B["Agent Usage Examples.ipynb<br/>🚀 Production Guide"]
+    B --> C["agent.py<br/>🔧 Compatibility Layer"]
     
-    K[main.py] --> J
-    K --> L[CLI Commands]
+    subgraph "Learning Path"
+        D["Understand Foundations"] --> E["See Production Patterns"]
+        E --> F["Bridge to src/ Library"]
+    end
+    
+    A --> D
+    B --> E
+    C --> F
+    
+    subgraph "Integration"
+        G["../src/base.py"] --> B
+        H["../src/tools.py"] --> B
+        I["../src/protocol.py"] --> B
+    end
+```
+
+### Production Examples (`examples/` directory)
+
+```mermaid
+graph TB
+    subgraph "Agent Evolution"
+        A["math_agent_evolution.py<br/>🧮 v1.0→v4.0 Progression"]
+    end
+    
+    subgraph "Protocol System"
+        B["protocol_usage.py<br/>🌐 Registration & API Demo"]
+    end
+    
+    subgraph "Unified System"
+        C["unified_system_demo.py<br/>🔗 Memory+RAG+Protocol"]
+    end
+    
+    subgraph "Dependencies"
+        D["../src/base.py"] --> A
+        D --> B
+        D --> C
+        E["../src/protocol.py"] --> B
+        E --> C
+        F["../src/memory.py"] --> C
+        G["../src/storage.py"] --> C
+        H["../src/tools.py"] --> A
+        H --> B
+    end
+    
+    I["README.md<br/>📖 Examples Guide"] --> A
+    I --> B
+    I --> C
+```
+
+### CLI & Entry Points Integration
+
+```mermaid
+graph TB
+    A["main.py<br/>🎯 CLI Entry Point"] --> B["server command"]
+    A --> C["discover command"]
+    A --> D["demo command"]
+    A --> E["watch command"]
+    
+    subgraph "Server Operations"
+        B --> F["src/server.py"]
+        F --> G["Auto-discover agents"]
+        F --> H["Start FastAPI server"]
+        H --> I["REST API endpoints"]
+    end
+    
+    subgraph "Discovery Operations"
+        C --> J["src/discovery.py"]
+        J --> K["Scan for agents"]
+        J --> L["Register tools"]
+        J --> M["Update registry"]
+    end
+    
+    subgraph "Demo Operations"
+        D --> N["examples/math_agent_evolution.py"]
+        N --> O["Show agent progression"]
+    end
+    
+    subgraph "Watch Operations"
+        E --> P["File system monitoring"]
+        P --> Q["Auto-registration"]
+        Q --> R["Hot reloading"]
+    end
 ```
 
 ### 🎯 **Learning → Production Pipeline**
