@@ -13,7 +13,7 @@ graph TB
     end
     
     subgraph "Protocol System"
-        G[@register_agent] --> D
+        G[Register Agent Decorator] --> D
         H[AgentProtocolServer] --> I[FastAPI App]
         D --> H
     end
@@ -27,8 +27,8 @@ graph TB
     subgraph "Discovery & Tools"
         M[DiscoveryEngine] --> N[ToolInfo]
         M --> O[CommandInfo]
-        P[CommandRegistry] --> Q[@command]
-        R[@tool] --> S[Tool Functions]
+        P[CommandRegistry] --> Q[Command Decorator]
+        R[Tool Decorator] --> S[Tool Functions]
     end
     
     subgraph "RAG System"

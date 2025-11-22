@@ -9,7 +9,7 @@ Learn how to create and integrate custom tools into your agents. Tools are the p
 ```mermaid
 graph TB
     subgraph "Tool Creation"
-        A[@tool Decorator] --> B[Function Definition]
+        A[Tool Decorator] --> B[Function Definition]
         B --> C[Type Hints & Docstring]
         C --> D[Error Handling]
     end
@@ -22,8 +22,8 @@ graph TB
     end
     
     subgraph "Agent Integration"
-        I --> J[agent.add_tool()]
-        I --> K[agent.add_tools()]
+        I --> J[Add Single Tool]
+        I --> K[Add Multiple Tools]
         J --> L[Agent Rebuild]
         K --> L
     end
