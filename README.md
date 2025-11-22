@@ -1,33 +1,31 @@
 # LangChain Agent Base
 
-**Production-ready AI agents in 3 lines of code** - A modular system for building LangChain 1.0 agents with Groq's blazing-fast inference, comprehensive tools, and advanced features like RAG, multi-agent coordination, and human-in-the-loop workflows.
+**Production-ready AI agents in 3 lines of code** - A comprehensive framework for building LangChain 1.0 agents with Groq's blazing-fast inference, unified memory & RAG system, multi-agent coordination, and automatic API generation.
 
 <div align="center">
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![LangChain 1.0+](https://img.shields.io/badge/langchain-1.0+-green.svg)](https://python.langchain.com/)
 [![Groq](https://img.shields.io/badge/groq-powered-orange.svg)](https://groq.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-**[📚 Documentation](docs/)** • **[🎯 Building Agents](docs/building-agents.md)** • **[🛠️ Adding Tools](docs/adding-tools.md)** • **[📈 Upgrading Agents](docs/upgrading-agents.md)** • **[🧠 Memory & RAG](docs/memory-and-rag.md)**
+**[🚀 Quick Start](docs/getting-started.md)** • **[🎯 Building Agents](docs/building-agents.md)** • **[🛠️ Adding Tools](docs/adding-tools.md)** • **[🧠 Memory & RAG](docs/memory-and-rag.md)** • **[📖 Full Documentation](docs/)**
 
 </div>
 
 ## ✨ **Key Features**
 
-- **⚡ Groq Integration** - 10x faster inference than OpenAI
-- **🎪 Specialist Agents** - Pre-built Math, Science, Coding agents  
-- **📚 Built-in RAG** - Document search and retrieval
-- **🤖 Multi-Agent Systems** - Coordinate teams of specialists
+- **⚡ Groq Integration** - 10x faster inference with gpt-oss-120b model
+- **🎪 Specialist Agents** - Pre-built Math, Science, Coding, and domain agents  
+- **🧠 Unified Memory & RAG** - Persistent conversations with smart compression and cross-system search
+- **📚 Semantic Search** - Search across conversations, documents, and agent cards simultaneously
+- **🤖 Multi-Agent Systems** - Coordinate teams of specialists with supervisor patterns
 - **🛡️ Human-in-the-Loop** - Approval workflows for sensitive operations
-- **🔧 15+ Tools** - Math, science, coding, and utility tools
-- **⚡ Command System** - Direct tool execution bypassing chat
-- **🌐 Protocol System** - Auto-generated APIs with versioning and metadata
-- **📦 Agent Cards** - JSON-based metadata with Qdrant storage
-- **🔍 Auto-Discovery** - Dynamic tool and agent registration
-- **🧠 Conversation Memory** - Persistent chat history with smart compression
-- **📚 Unified RAG** - Cross-system document and conversation search
-- **⚡ Memory-Enhanced Agents** - Agents that remember previous discussions
+- **🔧 15+ Professional Tools** - Advanced math, science, coding, and utility tools
+- **⚡ Command System** - Direct tool execution bypassing LLM for speed
+- **🌐 Protocol System** - Auto-generated REST APIs with versioning and metadata
+- **📦 Agent Cards** - Comprehensive metadata stored in Qdrant with semantic search
+- **🔍 Auto-Discovery** - Dynamic tool and agent registration with hot reloading
 
 ## 🚀 **Installation**
 
@@ -50,92 +48,203 @@ export GROQ_API_KEY="your_groq_api_key_here"
 cp -r src/ /path/to/your/project/src/
 ```
 
-## 💫 **Basic Usage**
+## 💫 **Basic Usage Examples**
 
-### Simple Agent
+### Simple Agent with Memory
 ```python
 from src.base import Agent
 
-agent = Agent()
+# Agent with persistent conversation memory
+agent = Agent(enable_memory=True, memory_session_id="user_session")
 response = agent.chat("What's 2 + 2?")
-print(response)  # Uses built-in calculator tool
+print(response)  # Uses built-in calculator: "2 + 2 = 4"
+
+# Memory remembers context
+follow_up = agent.chat("What did we just calculate?")  
+print(follow_up)  # References previous calculation
 ```
 
-### Math Specialist
+### Specialized Math Agent
 ```python
 from src.base import create_math_agent
 
 math_agent = create_math_agent()
 result = math_agent.chat("Solve x² + 5x + 6 = 0")
-print(result)  # "Two real roots: x₁ = -2, x₂ = -3"
+print(result)  # "Solutions: x₁ = -2, x₂ = -3"
+
+# Add memory to any specialist
+math_agent.enable_memory(session_id="math_project")
 ```
 
-### Add Custom Tools
+### Multi-Agent with Protocol System
+```python
+from src.protocol import register_agent
+from src.base import Agent
+from src.tools import get_science_tools
+
+@register_agent("chemistry", version="1.0.0", domain="science")
+class ChemistryAgent(Agent):
+    def __init__(self):
+        super().__init__(
+            system_prompt="Chemistry expert with lab safety focus",
+            tools=get_science_tools(),
+            enable_memory=True
+        )
+
+# Automatically available via REST API and discovery
+```
+
+### Custom Tools Integration
 ```python
 from langchain_core.tools import tool
 
 @tool
-def my_tool(query: str) -> str:
-    """My custom business logic."""
-    return f"Result: {query.upper()}"
+def analyze_market_data(symbol: str) -> str:
+    """Analyze financial market data for given symbol."""
+    return f"Analysis for {symbol}: Bullish trend detected (+5.2%)"
 
-agent.add_tool(my_tool)
-response = agent.chat("Use my tool with 'hello'")
+agent.add_tool(analyze_market_data)
+response = agent.chat("Analyze AAPL stock performance")
 ```
 
-## 📁 **Project Structure**
+## 📁 **Complete Project Structure**
 
 ```
 langchain-agent-base/
-├── 📂 src/                           # 🎯 Core framework (copy to your project!)
-│   ├── base.py                      # Agent & HITLAgent classes + factories
-│   ├── tools.py                     # 15+ organized tools (math, science, coding)
-│   ├── rag.py                       # RAG system & URL collection manager
-│   ├── commands.py                  # Command system for direct execution
-│   ├── protocol.py                  # Agent protocol & registry system
-│   ├── server.py                    # Auto-generated FastAPI server
-│   ├── storage.py                   # Qdrant integration for agent cards
-│   └── discovery.py                 # Dynamic tool/agent discovery
-├── 📂 examples/                     # 🚀 Complete implementation examples
-│   └── math_agent_evolution.py     # Math agent v1.0 → v4.0 progression
-├── 📂 guide/                        # 🎓 Interactive learning materials
-│   ├── Using LangChain 1.0.ipynb   # "How to build" step-by-step tutorial
-│   ├── Agent Usage Examples.ipynb  # "How to use" the src/ library
-│   └── agent.py                     # Original tutorial functions
-├── 📂 docs/                         # 📚 Complete documentation
-│   ├── building-agents.md           # Create agents from Agent Usage Examples
-│   ├── adding-tools.md              # Custom tool development guide
-│   ├── upgrading-agents.md          # Agent evolution strategies
-│   ├── agent-memory-loop.md         # System architecture deep-dive
-│   ├── advanced-usage.md            # Multi-agent, RAG, HITL patterns
-│   └── contributing.md              # Contribution guidelines
-├── 📄 pyproject.toml                # Dependencies and project config
-├── 📄 .env.example                  # Environment variables template
-└── 📄 README.md                     # This overview (you are here!)
+├── 📚 docs/                          # Complete documentation system
+│   ├── getting-started.md            # Installation and quick start guide
+│   ├── building-agents.md            # Agent creation patterns and factory functions
+│   ├── adding-tools.md               # Custom tool development with @tool decorator
+│   ├── upgrading-agents.md           # Agent versioning and evolution strategies
+│   ├── memory-and-rag.md             # Unified memory & RAG system guide ⭐ NEW
+│   ├── advanced-usage.md             # Multi-agent systems and HITL workflows
+│   ├── examples.md                   # Real-world business and technical applications
+│   ├── tool-collections.md           # Reference for all 15+ professional tools
+│   ├── api-reference.md              # Complete class and method documentation
+│   ├── agent-memory-loop.md          # Memory system architecture details
+│   └── contributing.md               # Community contribution guidelines
+│
+├── 🧪 examples/                      # Production-ready examples and patterns
+│   ├── math_agent_evolution.py       # Complete agent evolution (v1.0→v4.0) with versioning
+│   ├── protocol_usage.py             # Protocol system demonstration with custom agents
+│   ├── unified_system_demo.py        # Full system integration with memory and RAG
+│   └── README.md                     # Examples guide with learning path
+│
+├── 📖 guide/                         # Educational notebooks and tutorials
+│   ├── Using LangChain 1.0.ipynb     # Step-by-step "How to build" tutorial from scratch
+│   ├── Agent Usage Examples.ipynb    # "How to use" the src/ library in production
+│   └── agent.py                      # Tutorial compatibility layer and helper functions
+│
+├── ⚙️ src/                           # Core framework modules (copy to your project!)
+│   ├── base.py                       # Agent/HITLAgent classes + create_*_agent() factories
+│   ├── tools.py                      # 15+ professional tools: math, science, coding, utilities
+│   ├── commands.py                   # Command system for direct tool execution (/calc, /convert)
+│   ├── protocol.py                   # @register_agent decorator and metadata management
+│   ├── server.py                     # Auto-generated FastAPI server with REST endpoints
+│   ├── discovery.py                  # Dynamic tool/agent discovery with hot reloading
+│   ├── memory.py                     # Conversation memory with smart compression ⭐ NEW
+│   ├── storage.py                    # Unified Qdrant storage (agents/docs/conversations) ⭐ NEW
+│   └── rag.py                        # Document indexing, retrieval, and URL management
+│
+├── main.py                           # CLI entry point: server, discover, demo commands
+├── pyproject.toml                    # Complete dependency specification and metadata
+└── README.md                         # This comprehensive guide (you are here!)
 ```
 
-## 📚 **Documentation**
+**🌟 New in Latest Version:**
+- **Unified Memory System** - Persistent conversations with automatic compression
+- **Cross-System RAG** - Search across conversations, documents, and agent cards
+- **Enhanced Storage** - Single Qdrant instance for all data types with semantic search
+
+## 📚 **Complete Documentation**
 
 ### 🚀 **Getting Started**
-- **[Building Your First Agent](docs/building-agents.md)** - Step-by-step agent creation
-- **[Adding Custom Tools](docs/adding-tools.md)** - Extend agent capabilities
-- **[Upgrading Agents](docs/upgrading-agents.md)** - Evolve agents over time
-- **[Math Agent Example](examples/math_agent_evolution.py)** - Complete v1.0→v4.0 evolution
+- **[📖 Getting Started Guide](docs/getting-started.md)** - Installation, setup, and first agent in 30 seconds
+- **[🎯 Building Agents](docs/building-agents.md)** - Agent creation patterns, factory functions, and customization
+- **[🛠️ Adding Tools](docs/adding-tools.md)** - Create custom tools with @tool decorator and integrate with agents
+- **[📈 Upgrading Agents](docs/upgrading-agents.md)** - Agent versioning, evolution strategies, and migration patterns
 
-### 📖 **Reference**  
-- **[System Architecture](docs/agent-memory-loop.md)** - Deep dive into agent memory and loops
-- **[Advanced Usage](docs/advanced-usage.md)** - Multi-agent, RAG, HITL patterns
-- **[Contributing Guide](docs/contributing.md)** - How to contribute
+### 🧠 **Advanced Features** ⭐ NEW
+- **[🧠 Memory & RAG System](docs/memory-and-rag.md)** - Unified storage, conversation memory, and cross-system search
+- **[⚙️ Advanced Usage](docs/advanced-usage.md)** - Multi-agent coordination, HITL workflows, and complex patterns
+- **[🔧 Tool Collections](docs/tool-collections.md)** - Complete reference for all 15+ professional tools
 
-### 🎓 **Learning**
-- **["How to Build" Tutorial](guide/Using%20LangChain%201.0.ipynb)** - Learn LangChain 1.0 patterns
-- **["How to Use" Examples](guide/Agent%20Usage%20Examples.ipynb)** - Library usage patterns
+### 📖 **Learning Resources**
+- **[📝 Real-World Examples](docs/examples.md)** - Business applications, technical integrations, and use cases
+- **[🔍 API Reference](docs/api-reference.md)** - Complete class documentation and method signatures
+- **[🏗️ System Architecture](docs/agent-memory-loop.md)** - Memory system design and technical details
 
-### 🌐 **Protocol System**
-- **Automatic API Generation** - FastAPI endpoints for all agents
-- **Agent Versioning** - Semantic versioning with metadata
-- **Dynamic Discovery** - Auto-registration of tools and commands
-- **Qdrant Storage** - Persistent agent cards with semantic search
+### 🧪 **Hands-On Examples**
+- **[📊 Math Agent Evolution](examples/math_agent_evolution.py)** - Complete agent evolution from v1.0→v4.0
+- **[🌐 Protocol System Demo](examples/protocol_usage.py)** - Custom agent registration and API generation  
+- **[🔗 Unified System Demo](examples/unified_system_demo.py)** - Memory, RAG, and multi-agent integration
+- **[📖 Interactive Notebooks](guide/)** - Step-by-step tutorials and production usage patterns
+
+### 🤝 **Community**
+- **[🤝 Contributing Guide](docs/contributing.md)** - How to add tools, agents, and features to the framework
+
+## 🎓 **Learning Path & Directory Guide**
+
+### 📖 **Interactive Learning** (`guide/` directory)
+- **[📔 Using LangChain 1.0.ipynb](guide/Using%20LangChain%201.0.ipynb)** - **"How to Build"**: Step-by-step tutorial showing construction of agent systems from scratch using LangChain 1.0 patterns
+- **[📓 Agent Usage Examples.ipynb](guide/Agent%20Usage%20Examples.ipynb)** - **"How to Use"**: Production guide for the pre-built `src/` library with real-world patterns
+- **[⚙️ agent.py](guide/agent.py)** - Tutorial compatibility layer bridging educational concepts with production code
+
+### 🧪 **Production Examples** (`examples/` directory)  
+- **[🧮 Math Agent Evolution](examples/math_agent_evolution.py)** - Complete v1.0→v4.0 progression with versioning and capability enhancement
+- **[🌐 Protocol System Usage](examples/protocol_usage.py)** - Custom agent registration, API generation, and discovery patterns
+- **[🔗 Unified System Demo](examples/unified_system_demo.py)** - Memory, RAG, and multi-agent integration showcase
+
+### 📚 **Complete Documentation** (`docs/` directory)
+- **Core Guides**: Getting started, building agents, adding tools, versioning strategies
+- **Advanced Systems**: Memory & RAG integration, multi-agent coordination, HITL workflows  
+- **Reference Materials**: API documentation, tool collections, architecture details, real-world examples
+
+## 🔗 **System Integration & Connections**
+
+### How Everything Works Together
+
+```mermaid
+graph TB
+    A[docs/ - Documentation] --> B[guide/ - Learning]
+    B --> C[examples/ - Production Code]
+    C --> D[src/ - Core Framework]
+    
+    D --> E[base.py - Agent Classes]
+    D --> F[tools.py - 15+ Tools] 
+    D --> G[memory.py - Conversation Memory]
+    D --> H[storage.py - Unified Qdrant]
+    D --> I[protocol.py - Agent Registry]
+    D --> J[server.py - FastAPI Endpoints]
+    
+    E --> F
+    E --> G
+    G --> H
+    I --> H
+    I --> J
+    
+    K[main.py] --> J
+    K --> L[CLI Commands]
+```
+
+### 🎯 **Learning → Production Pipeline**
+
+1. **📖 Start with Documentation** - Read [Getting Started Guide](docs/getting-started.md) for overview
+2. **🎓 Learn with Notebooks** - Use [Using LangChain 1.0.ipynb](guide/Using%20LangChain%201.0.ipynb) to understand foundations  
+3. **🚀 See Production Usage** - Follow [Agent Usage Examples.ipynb](guide/Agent%20Usage%20Examples.ipynb) for real patterns
+4. **🧪 Study Examples** - Examine [math_agent_evolution.py](examples/math_agent_evolution.py) for complete implementation
+5. **🔧 Copy & Customize** - Take `src/` folder and adapt for your domain
+6. **🌐 Deploy with Protocol** - Use `main.py server` for production API deployment
+
+### 🔄 **Component Relationships**
+
+- **`src/base.py`** ← **Core agent classes** → Used by all examples and documentation
+- **`src/tools.py`** ← **Professional tools** → Referenced in guides and specialized agents  
+- **`src/memory.py`** ← **Conversation memory** → Integrates with storage and enhances all agents
+- **`src/storage.py`** ← **Unified Qdrant** → Serves memory, RAG, and protocol systems
+- **`src/protocol.py`** ← **Agent registry** → Connects discovery, server, and storage systems
+- **`examples/*.py`** ← **Production patterns** → Demonstrate integration of all src/ components
+- **`guide/*.ipynb`** ← **Educational content** → Bridge theory and practice using src/ modules
 
 ## 🧠 **Memory & RAG System**
 
@@ -169,12 +278,13 @@ memory_storage = storage.get_conversation_storage() # Chat history
 rag_storage = storage.get_rag_storage("docs")      # Documents
 ```
 
-**💡 Key Features**:
-- **Smart Compression** - Automatic conversation summarization
-- **Temporal Search** - Find conversations by time range
-- **URL Tracking** - Link conversations to specific resources
-- **Cross-System RAG** - Search across conversations, documents, and agent cards
-- **Session Management** - Persistent memory per user/project
+**💡 Unified System Features**:
+- **Smart Compression** - Automatic conversation summarization when context exceeds limits
+- **Temporal Search** - Find conversations by time range with semantic similarity
+- **URL Tracking** - Link conversations to specific resources and documentation
+- **Cross-System RAG** - Search across conversations, documents, and agent cards simultaneously  
+- **Session Management** - Persistent memory per user/project with hierarchical organization
+- **Compatible Storage** - Single Qdrant instance serves agent cards, conversations, and documents
 
 ## 🌐 **Protocol System Usage**
 
@@ -206,26 +316,68 @@ class MySpecializedAgent(Agent):
 # GET /agents - List all registered agents
 ```
 
-## 💡 **Why LangChain Agent Base?**
+## 🌟 **Why Choose LangChain Agent Base?**
 
-- **🚀 Production Ready** - Battle-tested patterns with error handling
-- **🌐 Auto-Generated APIs** - FastAPI server with versioning and metadata
-- **⚡ Blazing Fast** - Groq inference is 10x faster than OpenAI
-- **🔧 Infinitely Extensible** - Protocol-driven architecture for any domain
-- **🎯 Specialized Examples** - Math, science, and coding agent templates
-- **📦 Agent Cards** - JSON metadata with Qdrant vector storage
-- **🔍 Smart Discovery** - Automatic tool and agent registration
+### 🎯 **Complete Ecosystem**
+- **📁 Organized Structure** - Clear separation of docs, examples, guides, and core modules
+- **🔗 Connected Systems** - Memory, RAG, protocol, and discovery work together seamlessly  
+- **📖 Comprehensive Learning** - From educational tutorials to production examples
+- **🔄 Evolutionary Design** - Agents can grow from simple (v1.0) to advanced (v4.0+)
+
+### ⚡ **Production Excellence**
+- **🚀 Battle-Tested Patterns** - Error handling, graceful degradation, security considerations
+- **🌐 Auto-Generated APIs** - FastAPI server with OpenAPI documentation and client SDKs
+- **⚡ Blazing Performance** - Groq inference is 10x faster than OpenAI for most tasks
+- **🧠 Intelligent Memory** - Smart compression and cross-system search capabilities
+
+### 🔧 **Developer Experience**  
+- **🎪 Plug-and-Play Specialists** - Math, science, coding agents ready to use
+- **🛠️ Extensible Architecture** - Protocol-driven design supports any domain
+- **📦 Rich Metadata** - Agent cards with semantic search and version management
+- **🔍 Smart Discovery** - Automatic tool and agent registration with hot reloading
+
+### 📚 **Educational Value**
+- **Step-by-Step Tutorials** - Learn LangChain 1.0 patterns from scratch
+- **Real-World Examples** - Business applications and technical integrations
+- **Architecture Insights** - Understand memory loops, RAG systems, and multi-agent coordination
+
+## 🚀 **Get Started Today**
+
+### 🎯 **Choose Your Path**
+
+**🏃‍♂️ Quick Start** → [Getting Started Guide](docs/getting-started.md) → Agent running in 30 seconds  
+**🎓 Deep Learning** → [Using LangChain 1.0.ipynb](guide/Using%20LangChain%201.0.ipynb) → Build from scratch  
+**🚀 Production Ready** → [Agent Usage Examples.ipynb](guide/Agent%20Usage%20Examples.ipynb) → Use pre-built library  
+**🧪 See Examples** → [Math Agent Evolution](examples/math_agent_evolution.py) → Complete implementation  
+**🌐 API Server** → `python main.py server` → Auto-generated REST endpoints
+
+### 🎪 **What You Get**
+
+✅ **Complete Agent Framework** - From simple chat to complex multi-agent systems  
+✅ **Unified Memory & RAG** - Persistent conversations with document search  
+✅ **Professional Tools** - Math, science, coding, and business applications  
+✅ **Protocol System** - Auto-generated APIs with versioning and discovery  
+✅ **Educational Resources** - Notebooks, examples, and comprehensive docs  
+✅ **Production Patterns** - Battle-tested code with error handling and security  
 
 ## 🤝 **Contributing**
 
-We welcome contributions! See [Contributing Guide](docs/contributing.md) for details.
+We welcome contributions! See [Contributing Guide](docs/contributing.md) for:
+- Adding new tools and agent types
+- Improving documentation and examples  
+- Enhancing the protocol system
+- Building integrations and extensions
 
 ## 🙏 **Acknowledgments**
 
-This project builds upon the excellent work by **AI Maker Space**:
-- 📺 [LangChain 1.0 Complete Guide](https://www.youtube.com/watch?v=lSfAPNJx3xQ)
-- 📦 [AI-Maker-Space/LangChain1.0](https://github.com/AI-Maker-Space/LangChain1.0)
+This project builds upon excellent foundational work:
+- **AI Maker Space**: [LangChain 1.0 Complete Guide](https://www.youtube.com/watch?v=lSfAPNJx3xQ) and [Repository](https://github.com/AI-Maker-Space/LangChain1.0)
+- **LangChain Team**: For the incredible LangChain 1.0 framework and patterns
+- **Groq**: For blazing-fast inference that makes agents practical for production
+- **Community Contributors**: Everyone who has added tools, examples, and improvements
 
 ---
 
-**🎯 Ready to build powerful AI agents? Start with the [Getting Started Guide](docs/getting-started.md)!** 🚀
+**🌟 Ready to build the future with intelligent agents? Start your journey today!** 🚀
+
+**📖 Documentation** • **🧪 Examples** • **🎓 Tutorials** • **🌐 Protocol System** • **🧠 Memory & RAG**
