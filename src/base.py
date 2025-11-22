@@ -41,6 +41,11 @@ from src.tools import get_basic_tools, get_math_tools, get_science_tools, get_co
 from src.rag import setup_rag_tools
 from src.commands import CommandRegistry, create_math_commands, create_science_commands, create_coding_commands, create_agent_commands
 
+try:
+    MEMORY_AVAILABLE = True
+except ImportError:
+    MEMORY_AVAILABLE = False
+
 
 class Agent:
     """
@@ -54,6 +59,8 @@ class Agent:
                  system_prompt: str = "You are a helpful AI assistant specialized in coding, math, and science.",
                  tools: List[Callable] = None,
                  enable_commands: bool = False,
+                 enable_memory: bool = False,
+                 memory_session_id: str = "default",
                  **model_kwargs):
         """
         Initialize the agent.
@@ -75,6 +82,19 @@ class Agent:
         
         # Initialize command system if requested
         self.commands = CommandRegistry() if enable_commands else None
+        
+        # Memory system integration
+        self.enable_memory = enable_memory
+        self.memory_session_id = memory_session_id
+        self.memory_manager = None
+        
+        if enable_memory and MEMORY_AVAILABLE:
+            try:
+                from src.memory import get_memory_manager
+                self.memory_manager = get_memory_manager()
+            except ImportError:
+                print("⚠️ Memory system not available")
+                self.memory_manager = None
         
         # Setup model
         self.model = ChatGroq(
@@ -122,12 +142,13 @@ class Agent:
             system_prompt=self.system_prompt
         )
     
-    def chat(self, message: str, **kwargs) -> str:
+    def chat(self, message: str, session_id: str = None, **kwargs) -> str:
         """
         Send a message to the agent and get a response.
         
         Args:
             message: The user message
+            session_id: Optional session ID for memory (overrides default)
             **kwargs: Additional parameters for the agent
         
         Returns:
@@ -136,11 +157,55 @@ class Agent:
         if not self.agent:
             self._rebuild_agent()
         
-        response = self.agent.invoke({
-            "messages": [{"role": "user", "content": message}]
-        }, **kwargs)
-        
-        return response["messages"][-1].content
+        # Handle memory integration
+        if self.enable_memory and self.memory_manager:
+            actual_session_id = session_id or self.memory_session_id
+            
+            # Get conversation context
+            import asyncio
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                context = loop.run_until_complete(
+                    self.memory_manager.get_context_for_session(actual_session_id)
+                )
+                
+                # Enhance message with context
+                if context:
+                    enhanced_message = f"""Previous conversation context:
+{context}
+
+Current message: {message}"""
+                else:
+                    enhanced_message = message
+                
+                # Get response
+                response = self.agent.invoke({
+                    "messages": [{"role": "user", "content": enhanced_message}]
+                }, **kwargs)
+                
+                response_content = response["messages"][-1].content
+                
+                # Store in memory
+                loop.run_until_complete(
+                    self.memory_manager.add_message(
+                        session_id=actual_session_id,
+                        message=message,  # Store original message, not enhanced
+                        response=response_content
+                    )
+                )
+                
+                return response_content
+                
+            finally:
+                loop.close()
+        else:
+            # Standard chat without memory
+            response = self.agent.invoke({
+                "messages": [{"role": "user", "content": message}]
+            }, **kwargs)
+            
+            return response["messages"][-1].content
     
     def stream_chat(self, message: str, **kwargs):
         """
@@ -424,6 +489,35 @@ def create_science_agent(enable_commands: bool = True, **kwargs) -> Agent:
         agent.add_commands(create_agent_commands())
     
     return agent
+
+
+def create_memory_enhanced_agent(enable_commands: bool = True, **kwargs) -> Agent:
+    """Create an agent with conversation memory capabilities."""
+    agent = Agent(
+        system_prompt="""You are an intelligent assistant with access to conversation memory. 
+You can search through our previous conversations to find relevant context and information.
+Use the memory search tools when users refer to previous discussions, ask about past topics,
+or when you need historical context to provide better responses.""",
+        enable_memory=True,
+        enable_commands=enable_commands,
+        **kwargs
+    )
+    
+    # Add comprehensive tool set
+    agent.add_tools(get_basic_tools())
+    agent.add_tools(get_math_tools())
+    agent.add_tools(get_science_tools())
+    agent.add_tools(get_coding_tools())
+    
+    if enable_commands:
+        agent.enable_commands()
+        agent.add_commands(create_math_commands())
+        agent.add_commands(create_science_commands())
+        agent.add_commands(create_coding_commands())
+        agent.add_commands(create_agent_commands())
+    
+    return agent
+
 
 async def create_multi_agent_supervisor(**kwargs) -> Agent:
     """

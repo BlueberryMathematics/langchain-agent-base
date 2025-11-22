@@ -98,6 +98,43 @@ agent.add_tools(get_science_tools())
 response = agent.chat("Calculate the square root of 144 and convert 100°F to Celsius")
 ```
 
+## 🚀 Protocol System (Advanced)
+
+### Create Registered Agents with Auto-API
+
+```python
+from src.protocol import register_agent, AgentStatus
+from src.base import Agent
+from src.tools import get_math_tools
+
+# Create specialized agent with automatic registration
+@register_agent("math_expert", version="1.0.0", domain="mathematics", 
+                status=AgentStatus.PRODUCTION)
+class MathAgent(Agent):
+    def __init__(self):
+        super().__init__(
+            system_prompt="Advanced mathematical assistant with specialized tools",
+            tools=get_math_tools()
+        )
+
+# Automatically generates:
+# - REST API endpoints (/chat, /commands, /tools)
+# - Agent metadata (AgentCard) stored in Qdrant
+# - Version management and discovery
+```
+
+### Run Protocol Server
+
+```python
+from src.server import run_protocol_server
+
+# Start server with all registered agents
+run_protocol_server(host="0.0.0.0", port=8000)
+
+# Visit http://localhost:8000/docs for auto-generated API
+# All registered agents available via REST endpoints
+```
+
 ### Use Pre-Built Specialists
 
 ```python

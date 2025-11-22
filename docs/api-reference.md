@@ -12,6 +12,48 @@ The main agent class that can be configured with any tools and capabilities.
 from src.base import Agent
 ```
 
+### AgentCard
+
+Metadata container for agent registration and versioning.
+
+```python
+from src.protocol import AgentCard, AgentStatus
+```
+
+#### Properties
+- `name`: Agent identifier
+- `version`: Semantic version (e.g., "1.2.0")
+- `domain`: Domain category (math, science, finance, etc.)
+- `category`: Agent type (specialist, generalist, etc.)
+- `description`: Human-readable description
+- `system_prompt`: LLM system prompt
+- `tools`: List of available tool names
+- `commands`: List of available command names
+- `status`: AgentStatus enum value
+- `created_at`/`updated_at`: Timestamps
+- `author`: Agent creator
+- `tags`: Searchable keywords
+
+### AgentRegistry
+
+Central registry for managing agent versions and metadata.
+
+```python
+from src.protocol import get_agent_registry
+registry = get_agent_registry()
+```
+
+#### Methods
+
+##### `register_agent_class(agent_class, **metadata) -> AgentCard`
+Register an agent class with metadata.
+
+##### `get_agent_card(name: str, version: str = None) -> AgentCard`
+Retrieve agent metadata card.
+
+##### `list_agents(domain: str = None, status: AgentStatus = None) -> List[AgentCard]`
+List registered agents with optional filtering.
+
 #### Constructor
 
 ```python
