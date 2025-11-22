@@ -145,6 +145,13 @@ langchain-agent-base/
 │   └── contributing.md               # Community contribution guidelines
 │
 ├── 🧪 examples/                      # Production-ready examples and patterns
+│   ├── building-ultimate-math-agent/ # Complete tutorial: Build custom agents from scratch ⭐ NEW
+│   │   ├── README.md                 # Comprehensive guide with step-by-step instructions
+│   │   ├── SIMPLE-EXPLANATION.md     # Beginner-friendly overview with mental models
+│   │   ├── ARCHITECTURE.md           # Visual system diagrams and data flow
+│   │   ├── example_calculus_tools.py # Working tool implementations
+│   │   ├── example_math_agent.py     # Complete agent example
+│   │   └── quick_start.py            # Automated project setup script
 │   ├── math_agent_evolution.py       # Complete agent evolution (v1.0→v4.0) with versioning
 │   ├── protocol_usage.py             # Protocol system demonstration with custom agents
 │   ├── unified_system_demo.py        # Full system integration with memory and RAG
@@ -195,6 +202,7 @@ langchain-agent-base/
 - **[🏗️ System Architecture](docs/agent-memory-loop.md)** - Memory system design and technical details
 
 ### 🧪 **Hands-On Examples**
+- **[🎓 Building Ultimate Math Agent](examples/building-ultimate-math-agent/)** - Complete tutorial for using framework in your own projects ⭐ NEW
 - **[📊 Math Agent Evolution](examples/math_agent_evolution.py)** - Complete agent evolution from v1.0→v4.0
 - **[🌐 Protocol System Demo](examples/protocol_usage.py)** - Custom agent registration and API generation  
 - **[🔗 Unified System Demo](examples/unified_system_demo.py)** - Memory, RAG, and multi-agent integration
@@ -211,6 +219,7 @@ langchain-agent-base/
 - **[⚙️ agent.py](guide/agent.py)** - Tutorial compatibility layer bridging educational concepts with production code
 
 ### 🧪 **Production Examples** (`examples/` directory)  
+- **[🎓 Building Ultimate Math Agent](examples/building-ultimate-math-agent/)** - Complete end-to-end tutorial for building custom agents in your own projects ⭐ NEW
 - **[🧮 Math Agent Evolution](examples/math_agent_evolution.py)** - Complete v1.0→v4.0 progression with versioning and capability enhancement
 - **[🌐 Protocol System Usage](examples/protocol_usage.py)** - Custom agent registration, API generation, and discovery patterns
 - **[🔗 Unified System Demo](examples/unified_system_demo.py)** - Memory, RAG, and multi-agent integration showcase
@@ -309,33 +318,46 @@ graph TD
 
 ```mermaid
 graph TB
+    subgraph "Complete Tutorial"
+        A["building-ultimate-math-agent/<br/>🎓 End-to-End Guide"]
+        A1["README.md"] --> A
+        A2["SIMPLE-EXPLANATION.md"] --> A
+        A3["ARCHITECTURE.md"] --> A
+        A4["example_calculus_tools.py"] --> A
+        A5["example_math_agent.py"] --> A
+        A6["quick_start.py"] --> A
+    end
+    
     subgraph "Agent Evolution"
-        A["math_agent_evolution.py<br/>🧮 v1.0→v4.0 Progression"]
+        B["math_agent_evolution.py<br/>🧮 v1.0→v4.0 Progression"]
     end
     
     subgraph "Protocol System"
-        B["protocol_usage.py<br/>🌐 Registration & API Demo"]
+        C["protocol_usage.py<br/>🌐 Registration & API Demo"]
     end
     
     subgraph "Unified System"
-        C["unified_system_demo.py<br/>🔗 Memory+RAG+Protocol"]
+        D["unified_system_demo.py<br/>🔗 Memory+RAG+Protocol"]
     end
     
     subgraph "Dependencies"
-        D["../src/base.py"] --> A
-        D --> B
-        D --> C
-        E["../src/protocol.py"] --> B
+        E["../src/base.py"] --> A
+        E --> B
         E --> C
-        F["../src/memory.py"] --> C
-        G["../src/storage.py"] --> C
-        H["../src/tools.py"] --> A
-        H --> B
+        E --> D
+        F["../src/protocol.py"] --> C
+        F --> D
+        G["../src/memory.py"] --> D
+        H["../src/storage.py"] --> D
+        I["../src/tools.py"] --> A
+        I --> B
+        I --> C
     end
     
-    I["README.md<br/>📖 Examples Guide"] --> A
-    I --> B
-    I --> C
+    J["README.md<br/>📖 Examples Guide"] --> A
+    J --> B
+    J --> C
+    J --> D
 ```
 
 ### CLI & Entry Points Integration
@@ -378,9 +400,10 @@ graph TB
 1. **📖 Start with Documentation** - Read [Getting Started Guide](docs/getting-started.md) for overview
 2. **🎓 Learn with Notebooks** - Use [Using LangChain 1.0.ipynb](guide/Using%20LangChain%201.0.ipynb) to understand foundations  
 3. **🚀 See Production Usage** - Follow [Agent Usage Examples.ipynb](guide/Agent%20Usage%20Examples.ipynb) for real patterns
-4. **🧪 Study Examples** - Examine [math_agent_evolution.py](examples/math_agent_evolution.py) for complete implementation
-5. **🔧 Copy & Customize** - Take `src/` folder and adapt for your domain
-6. **🌐 Deploy with Protocol** - Use `main.py server` for production API deployment
+4. **🎯 Complete Tutorial** - Work through [Building Ultimate Math Agent](examples/building-ultimate-math-agent/) to build your own project ⭐ NEW
+5. **🧪 Study Examples** - Examine [math_agent_evolution.py](examples/math_agent_evolution.py) for complete implementation
+6. **🔧 Copy & Customize** - Take `src/` folder and adapt for your domain
+7. **🌐 Deploy with Protocol** - Use `main.py server` for production API deployment
 
 ### 🔄 **Component Relationships**
 
@@ -492,7 +515,8 @@ class MySpecializedAgent(Agent):
 ### 🎯 **Choose Your Path**
 
 **🏃‍♂️ Quick Start** → [Getting Started Guide](docs/getting-started.md) → Agent running in 30 seconds  
-**🎓 Deep Learning** → [Using LangChain 1.0.ipynb](guide/Using%20LangChain%201.0.ipynb) → Build from scratch  
+**🎓 Complete Tutorial** → [Building Ultimate Math Agent](examples/building-ultimate-math-agent/) → Build your own project ⭐ NEW  
+**📚 Deep Learning** → [Using LangChain 1.0.ipynb](guide/Using%20LangChain%201.0.ipynb) → Build from scratch  
 **🚀 Production Ready** → [Agent Usage Examples.ipynb](guide/Agent%20Usage%20Examples.ipynb) → Use pre-built library  
 **🧪 See Examples** → [Math Agent Evolution](examples/math_agent_evolution.py) → Complete implementation  
 **🌐 API Server** → `python main.py server` → Auto-generated REST endpoints
