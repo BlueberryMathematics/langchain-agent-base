@@ -4,6 +4,28 @@ This directory contains comprehensive examples demonstrating the LangChain Agent
 
 ## 📁 Available Examples
 
+### 🏗️ **Building Your Ultimate Math Agent** (`building-ultimate-math-agent/`)
+**Complete guide to creating your own specialized agent project**
+
+A comprehensive tutorial showing:
+- How to set up a new project using this framework
+- Complete project structure with all files
+- Step-by-step instructions for building a custom math agent
+- How to add your own custom tools
+- Deployment options (CLI, API, web app integration)
+- Daily development workflow
+
+```bash
+# Read the comprehensive guide
+cat examples/building-ultimate-math-agent/README.md
+```
+
+**Perfect for:**
+- Starting your own agent project from scratch
+- Understanding how to use the framework in production
+- Learning best practices for agent development
+- Building domain-specific AI assistants
+
 ### 🧮 **Math Agent Evolution** (`math_agent_evolution.py`)
 **Complete agent evolution from basic to advanced**
 
