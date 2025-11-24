@@ -19,6 +19,15 @@ Usage:
     rag_tools = await setup_rag_tools()
     agent.add_tools(rag_tools)
     response = agent.chat("Search the documents for X")
+    
+    # Load tools from toolbox
+    agent.load_tools_from_toolbox(category="math")
+    
+    # Generate tools dynamically
+    agent.generate_and_add_tool(
+        "Calculate prime factors of a number",
+        category="math"
+    )
 """
 
 import os
@@ -40,6 +49,13 @@ except ImportError:
 from src.tools import get_basic_tools, get_math_tools, get_science_tools, get_coding_tools
 from src.rag import setup_rag_tools
 from src.commands import CommandRegistry, create_math_commands, create_science_commands, create_coding_commands, create_agent_commands
+
+try:
+    from src.toolbox import get_toolbox, ToolboxManager
+    from src.tool_generator import ToolGenerator, ToolAssistant
+    TOOLBOX_AVAILABLE = True
+except ImportError:
+    TOOLBOX_AVAILABLE = False
 
 try:
     MEMORY_AVAILABLE = True
@@ -133,6 +149,56 @@ class Agent:
     def list_tools(self) -> List[str]:
         """List all available tool names."""
         return [getattr(tool, 'name', str(tool)) for tool in self.tools]
+    
+    def load_tools_from_toolbox(self, category: str = None, tags: List[str] = None):
+        """
+        Load tools from the toolbox system.
+        
+        Args:
+            category: Load tools from specific category
+            tags: Load tools matching specific tags
+        """
+        if not TOOLBOX_AVAILABLE:
+            print("⚠️  Toolbox system not available")
+            return
+        
+        toolbox = get_toolbox()
+        
+        if category:
+            tools = toolbox.get_tools_by_category(category)
+        elif tags:
+            tools = toolbox.get_tools_by_tags(tags)
+        else:
+            tools = toolbox.get_all_tools()
+        
+        self.add_tools(tools)
+        print(f"✅ Loaded {len(tools)} tools from toolbox")
+    
+    def generate_and_add_tool(self, description: str, category: str = "custom") -> bool:
+        """
+        Generate a new tool using LLM and add it to the agent.
+        
+        Args:
+            description: What the tool should do
+            category: Tool category
+        
+        Returns:
+            True if successful
+        """
+        if not TOOLBOX_AVAILABLE:
+            print("⚠️  Tool generator not available")
+            return False
+        
+        assistant = ToolAssistant()
+        success, message, tool_func = assistant.create_tool_for_agent(
+            self,
+            tool_description=description,
+            category=category,
+            add_to_agent=True
+        )
+        
+        print(message)
+        return success
     
     def _rebuild_agent(self):
         """Rebuild the agent with current tools and configuration."""

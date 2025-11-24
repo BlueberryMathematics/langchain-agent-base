@@ -10,6 +10,8 @@ from src.base import Agent
 from src.tools import get_math_tools
 from src.protocol import register_agent, AgentStatus
 from src.commands import create_math_commands
+from src.toolbox import get_toolbox
+from src.tool_generator import generate_tool
 
 # In your real project, you'd import from your custom_tools/ directory:
 # from custom_tools.calculus import get_calculus_tools
@@ -214,6 +216,14 @@ I use precise mathematical notation and provide accurate, verified results.""",
         for cmd in create_math_commands():
             self.add_command(cmd)
         
+        # Load any additional tools from toolbox
+        print("  🧰 Loading tools from toolbox...")
+        try:
+            self.load_tools_from_toolbox(category="math")
+            print(f"     Loaded {len(self.list_tools()) - len(custom_tools) - len(get_math_tools())} additional tools from toolbox")
+        except Exception as e:
+            print(f"     Toolbox loading skipped: {e}")
+        
         print(f"\n✅ Ultimate Math Agent Ready!")
         print(f"   📊 Total tools: {len(self.tools)}")
         print(f"   🛠️  Available tools: {', '.join(self.list_tools()[:5])}...")
@@ -341,6 +351,54 @@ def demonstrate_commands():
     print("   • When you know exactly which tool to use")
 
 
+def demonstrate_toolbox():
+    """Demonstrate dynamic tool generation with the toolbox system."""
+    
+    print("\n🧰 Toolbox System Demonstration")
+    print("=" * 70)
+    
+    agent = create_ultimate_math_agent()
+    
+    print("\n1️⃣ Generating a new tool dynamically...")
+    print("   Description: 'Calculate the Fibonacci sequence up to n terms'")
+    
+    try:
+        success = agent.generate_and_add_tool(
+            "Calculate the Fibonacci sequence up to n terms and return as a list",
+            category="math"
+        )
+        
+        if success:
+            print("   ✅ Tool generated and added!")
+            print(f"   📊 Agent now has {len(agent.list_tools())} tools")
+            
+            # Test the new tool
+            print("\n2️⃣ Testing the generated tool...")
+            response = agent.chat("Generate the first 10 Fibonacci numbers")
+            print(f"   🤖 Response: {response[:200]}...")
+        else:
+            print("   ⚠️  Tool generation failed (API key may be needed)")
+    except Exception as e:
+        print(f"   ⚠️  Toolbox feature: {e}")
+    
+    print("\n3️⃣ Loading tools from toolbox...")
+    try:
+        toolbox = get_toolbox()
+        tools = toolbox.list_tools(category="math")
+        print(f"   📦 Toolbox contains {len(tools)} math tools:")
+        for tool_info in tools[:5]:
+            print(f"      • {tool_info['name']} - {tool_info['description'][:50]}...")
+    except Exception as e:
+        print(f"   ⚠️  Toolbox access: {e}")
+    
+    print("\n💡 Toolbox benefits:")
+    print("   • Generate tools from natural language")
+    print("   • Persist tools across sessions")
+    print("   • Share tools between agents")
+    print("   • Validate and test tools automatically")
+    print("   • Build your tool library over time")
+
+
 # Main execution
 if __name__ == "__main__":
     import sys
@@ -349,6 +407,7 @@ if __name__ == "__main__":
         # Run demonstrations
         demonstrate_agent()
         demonstrate_commands()
+        demonstrate_toolbox()
     else:
         # Interactive mode
         print("🤖 Ultimate Math Agent - Interactive Mode")
@@ -357,6 +416,8 @@ if __name__ == "__main__":
         print("  • 'demo' - Run demonstration")
         print("  • 'help' - Show available tools")
         print("  • 'commands' - Show available commands")
+        print("  • 'toolbox' - Show toolbox system")
+        print("  • 'generate <description>' - Generate a new tool")
         print("  • 'exit' or 'quit' - End session")
         print("=" * 70)
         
@@ -383,6 +444,23 @@ if __name__ == "__main__":
                 
                 if user_input.lower() == 'commands':
                     print(f"\n⚡ Available commands: {', '.join(agent.list_commands())}")
+                    continue
+                
+                if user_input.lower() == 'toolbox':
+                    demonstrate_toolbox()
+                    continue
+                
+                if user_input.lower().startswith('generate '):
+                    description = user_input[9:].strip()
+                    if description:
+                        print(f"\n🤖 Generating tool: {description}")
+                        success = agent.generate_and_add_tool(description, category="math")
+                        if success:
+                            print(f"✅ Tool generated! Total tools: {len(agent.list_tools())}")
+                        else:
+                            print("⚠️  Tool generation failed")
+                    else:
+                        print("⚠️  Please provide a description: generate <description>")
                     continue
                 
                 # Process query

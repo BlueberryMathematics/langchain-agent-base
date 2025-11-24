@@ -9,7 +9,7 @@
 [![Groq](https://img.shields.io/badge/groq-powered-orange.svg)](https://groq.com/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-**[🚀 Quick Start](docs/getting-started.md)** • **[🎯 Building Agents](docs/building-agents.md)** • **[🛠️ Adding Tools](docs/adding-tools.md)** • **[🧠 Memory & RAG](docs/memory-and-rag.md)** • **[📖 Full Documentation](docs/)**
+**[🚀 Quick Start](docs/getting-started.md)** • **[🎯 Building Agents](docs/building-agents.md)** • **[🛠️ Adding Tools](docs/adding-tools.md)** • **[🧰 Toolbox System](docs/toolbox-system.md)** • **[🧠 Memory & RAG](docs/memory-and-rag.md)** • **[📖 Full Documentation](docs/)**
 
 </div>
 
@@ -17,6 +17,7 @@
 
 - **⚡ Groq Integration** - 10x faster inference with gpt-oss-120b model
 - **🎪 Specialist Agents** - Pre-built Math, Science, Coding, and domain agents  
+- **🧰 Dynamic Toolbox** - LLM-assisted tool generation, validation, and persistent storage
 - **🧠 Unified Memory & RAG** - Persistent conversations with smart compression and cross-system search
 - **📚 Semantic Search** - Search across conversations, documents, and agent cards simultaneously
 - **🤖 Multi-Agent Systems** - Coordinate teams of specialists with supervisor patterns
@@ -127,6 +128,27 @@ agent.add_tool(analyze_market_data)
 response = agent.chat("Analyze AAPL stock performance")
 ```
 
+### Dynamic Toolbox with LLM Generation
+```python
+from src.toolbox import get_toolbox
+from src.tool_generator import generate_tool
+
+# Generate tools from natural language
+success, message, tool = generate_tool(
+    "Calculate the fibonacci sequence up to n terms",
+    category="math"
+)
+
+# Tools automatically saved and validated
+agent.load_tools_from_toolbox(category="math")
+
+# Or generate tools on-the-fly during conversations
+agent.generate_and_add_tool(
+    "Calculate prime factors of a number",
+    category="math"
+)
+```
+
 ## 📁 **Complete Project Structure**
 
 ```
@@ -135,6 +157,7 @@ langchain-agent-base/
 │   ├── getting-started.md            # Installation and quick start guide
 │   ├── building-agents.md            # Agent creation patterns and factory functions
 │   ├── adding-tools.md               # Custom tool development with @tool decorator
+│   ├── toolbox-system.md             # Dynamic tool management and LLM generation ⭐ NEW
 │   ├── upgrading-agents.md           # Agent versioning and evolution strategies
 │   ├── memory-and-rag.md             # Unified memory & RAG system guide ⭐ NEW
 │   ├── advanced-usage.md             # Multi-agent systems and HITL workflows
@@ -165,6 +188,8 @@ langchain-agent-base/
 ├── ⚙️ src/                           # Core framework modules (copy to your project!)
 │   ├── base.py                       # Agent/HITLAgent classes + create_*_agent() factories
 │   ├── tools.py                      # 15+ professional tools: math, science, coding, utilities
+│   ├── toolbox.py                    # Dynamic tool management and persistent storage ⭐ NEW
+│   ├── tool_generator.py             # LLM-assisted tool creation and improvement ⭐ NEW
 │   ├── commands.py                   # Command system for direct tool execution (/calc, /convert)
 │   ├── protocol.py                   # @register_agent decorator and metadata management
 │   ├── server.py                     # Auto-generated FastAPI server with REST endpoints
@@ -179,6 +204,8 @@ langchain-agent-base/
 ```
 
 **🌟 New in Latest Version:**
+- **Dynamic Toolbox** - LLM-assisted tool generation with validation and persistent storage
+- **Tool Generator** - Create tools from natural language descriptions
 - **Unified Memory System** - Persistent conversations with automatic compression
 - **Cross-System RAG** - Search across conversations, documents, and agent cards
 - **Enhanced Storage** - Single Qdrant instance for all data types with semantic search
@@ -189,6 +216,7 @@ langchain-agent-base/
 - **[📖 Getting Started Guide](docs/getting-started.md)** - Installation, setup, and first agent in 30 seconds
 - **[🎯 Building Agents](docs/building-agents.md)** - Agent creation patterns, factory functions, and customization
 - **[🛠️ Adding Tools](docs/adding-tools.md)** - Create custom tools with @tool decorator and integrate with agents
+- **[🧰 Toolbox System](docs/toolbox-system.md)** - Dynamic tool management with LLM generation ⭐ NEW
 - **[📈 Upgrading Agents](docs/upgrading-agents.md)** - Agent versioning, evolution strategies, and migration patterns
 
 ### 🧠 **Advanced Features** ⭐ NEW
@@ -239,12 +267,16 @@ graph TB
         A[base.py] --> B[tools.py]
         A --> C[commands.py]
         A --> D[memory.py]
+        A --> T[toolbox.py]
+        A --> TG[tool_generator.py]
         D --> E[storage.py]
+        TG --> T
     end
     
     subgraph "Protocol & Discovery"
         F[protocol.py] --> E
         G[discovery.py] --> F
+        G --> T
         H[server.py] --> F
         H --> A
     end
@@ -550,4 +582,4 @@ This project builds upon excellent foundational work:
 
 **🌟 Ready to build the future with intelligent agents? Start your journey today!** 🚀
 
-**📖 Documentation** • **🧪 Examples** • **🎓 Tutorials** • **🌐 Protocol System** • **🧠 Memory & RAG**
+**📖 Documentation** • **🧪 Examples** • **🎓 Tutorials** • **🧰 Toolbox System** • **🌐 Protocol System** • **🧠 Memory & RAG**

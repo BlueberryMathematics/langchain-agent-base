@@ -16,6 +16,8 @@ from src.memory import ConversationMemoryManager
 from src.protocol import register_agent, AgentStatus, get_agent_registry
 from src.base import Agent, create_memory_enhanced_agent
 from src.tools import get_math_tools
+from src.toolbox import get_toolbox
+from src.tool_generator import generate_tool
 
 
 async def demonstrate_unified_system():
@@ -203,6 +205,35 @@ async def demonstrate_unified_system():
     )
     print(f"📝 Found {len(compressed_results)} results in compressed session")
     
+    # 10. Toolbox integration with unified system
+    print("\n🔟 Demonstrating toolbox in unified system...")
+    
+    print("Generating specialized tool for math agent...")
+    success, message, tool = generate_tool(
+        "Calculate the area under a curve using numerical integration (trapezoidal rule)",
+        category="math"
+    )
+    
+    if success:
+        print(f"✅ {message}")
+        
+        # Add to memory-enhanced agent
+        unified_agent.add_tool(tool)
+        print(f"Tool integrated with memory-enhanced agent")
+        
+        # Store tool usage in conversation
+        await memory_manager.add_message(
+            session_id=session_id,
+            message="I generated a new integration tool",
+            response=f"Created tool: {tool.name}",
+            metadata={"event": "tool_generation", "category": "math"}
+        )
+    
+    # Show toolbox contents
+    toolbox = get_toolbox()
+    all_tools = toolbox.list_tools()
+    print(f"\n📦 Toolbox contains {len(all_tools)} tools across all categories")
+    
     print("\n✅ Unified System Demo Complete!")
     print("\n🎯 Key Features Demonstrated:")
     print("   ✓ Unified Qdrant storage for all data types")
@@ -212,6 +243,7 @@ async def demonstrate_unified_system():
     print("   ✓ Cross-system search and integration")
     print("   ✓ Automatic memory compression")
     print("   ✓ Memory-enhanced agent interactions")
+    print("   ✓ Dynamic toolbox integration with all systems")
     
     return {
         "unified_storage": unified_storage,

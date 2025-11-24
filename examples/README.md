@@ -47,6 +47,29 @@ python examples/math_agent_evolution.py
 - **v3.0**: Ultimate with symbolic math, statistics, and number theory
 - **v4.0-beta**: Experimental with AI-powered theorem proving
 
+### 🧰 **Dynamic Toolbox System** (`toolbox_demo.py`)
+**LLM-assisted tool generation and management**
+
+Demonstrates:
+- Creating tools from code strings
+- LLM-generated tool creation from descriptions
+- Tool validation and security checks
+- Persistent storage and organization
+- Agent integration with dynamic tools
+- Testing and improving tools
+
+```bash
+# Run the toolbox demonstration
+python examples/toolbox_demo.py
+```
+
+**Features Shown:**
+- **Basic Operations**: Add, list, test, remove tools
+- **LLM Generation**: Create tools from natural language
+- **Agent Integration**: Load and generate tools during runtime
+- **Validation**: Security checks for dangerous operations
+- **Management**: Batch creation, categorization, export
+
 ### 🌐 **Protocol System Usage** (`protocol_usage.py`)
 **Complete protocol system demonstration**
 
@@ -190,6 +213,9 @@ python examples/math_agent_evolution.py
 
 # Protocol system demonstration  
 python examples/protocol_usage.py
+
+# Dynamic toolbox demonstration
+python examples/toolbox_demo.py
 
 # Start protocol server (combines everything)
 python main.py server

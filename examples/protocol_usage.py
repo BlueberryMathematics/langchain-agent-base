@@ -20,6 +20,8 @@ from src.base import Agent
 from src.protocol import register_agent, AgentStatus, get_agent_registry
 from src.discovery import AutoRegisterMixin, auto_discover_all
 from src.tools import get_math_tools, get_science_tools
+from src.toolbox import get_toolbox
+from src.tool_generator import generate_tool, ToolAssistant
 from langchain_core.tools import tool
 
 
@@ -266,10 +268,42 @@ async def demonstrate_protocol_system():
     except Exception as e:
         print(f"Command system error: {e}")
     
-    print("\\n✅ Protocol demonstration complete!")
-    print("\\n🚀 To run the full API server:")
+    # 6. Toolbox integration demonstration
+    print("\n🧰 Step 6: Toolbox Integration")
+    print("-" * 30)
+    
+    print("Generating custom tool for business agent...")
+    success, message, tool = generate_tool(
+        "Calculate customer lifetime value (CLV) based on average purchase, frequency, and years",
+        category="business"
+    )
+    
+    if success:
+        print(f"✅ {message}")
+        
+        # Add to business agent
+        try:
+            business_agent = registry.create_agent_instance("business", "1.0.0")
+            business_agent.add_tool(tool)
+            print(f"Tool added to business agent. Total tools: {len(business_agent.list_tools())}")
+        except Exception as e:
+            print(f"Business agent integration: {e}")
+    
+    # Show toolbox capabilities
+    toolbox = get_toolbox()
+    assistant = ToolAssistant()
+    
+    print("\nSuggesting tools for task...")
+    suggestions = assistant.suggest_tools_for_task("I need to analyze customer orders and inventory")
+    if suggestions:
+        print(f"Found {len(suggestions)} relevant existing tools:")
+        for sugg in suggestions[:3]:
+            print(f"  • {sugg['name']} - {sugg['description'][:50]}...")
+    
+    print("\n✅ Protocol demonstration complete!")
+    print("\n🚀 To run the full API server:")
     print("   python main.py server")
-    print("\\n📚 API docs will be available at:")
+    print("\n📚 API docs will be available at:")
     print("   http://localhost:8000/docs")
 
 

@@ -7,6 +7,7 @@
 An advanced mathematical assistant that:
 - Starts with basic calculator functions
 - Grows over time with new capabilities
+- **🧰 Generates tools dynamically from natural language**
 - Has persistent conversation memory
 - Includes custom math tools you create
 - Deploys as a REST API
@@ -23,6 +24,8 @@ my-ultimate-math-agent/
 ├── 📁 src/                           # Copy from langchain-agent-base
 │   ├── base.py                       # Core Agent classes
 │   ├── tools.py                      # Built-in tool collections
+│   ├── toolbox.py                    # Dynamic toolbox system
+│   ├── tool_generator.py             # LLM tool generation
 │   ├── commands.py                   # Command system
 │   ├── protocol.py                   # Agent registration
 │   ├── server.py                     # FastAPI server
@@ -642,6 +645,59 @@ def solve_math(request):
     
     return {"response": response}
 ```
+
+---
+
+## 🧰 **Dynamic Toolbox System** (New!)
+
+The Ultimate Math Agent now includes the dynamic toolbox system for generating tools on-the-fly:
+
+### **Generate Tools from Natural Language**
+
+```python
+agent = create_ultimate_math_agent()
+
+# Generate a new tool dynamically
+agent.generate_and_add_tool(
+    "Calculate the Fibonacci sequence up to n terms",
+    category="math"
+)
+
+# Now use it
+response = agent.chat("Generate the first 15 Fibonacci numbers")
+```
+
+### **Load Tools from Toolbox**
+
+```python
+from src.toolbox import get_toolbox
+
+# Load previously generated tools
+agent.load_tools_from_toolbox(category="math")
+
+# List available tools
+toolbox = get_toolbox()
+tools = toolbox.list_tools(category="math")
+```
+
+### **Interactive Tool Generation**
+
+```bash
+python example_math_agent.py
+
+> generate Calculate matrix determinant for any size matrix
+🤖 Generating tool: Calculate matrix determinant for any size matrix
+✅ Tool generated! Total tools: 15
+
+> What's the determinant of [[2, 3], [1, 4]]?
+🤖 The determinant is 5
+```
+
+### **Benefits**
+- **Adaptive**: Generate tools as needs arise
+- **Persistent**: Tools saved to `data/toolbox.json`
+- **Shareable**: Use generated tools across agents
+- **Validated**: Automatic testing and validation
 
 ---
 

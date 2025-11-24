@@ -17,6 +17,8 @@ from src.protocol import register_agent, AgentStatus
 from src.discovery import AutoRegisterMixin
 from src.tools import get_math_tools, advanced_calculator, solve_quadratic, matrix_operations
 from src.commands import create_math_commands
+from src.toolbox import get_toolbox
+from src.tool_generator import generate_tool
 from langchain_core.tools import tool
 
 
@@ -478,6 +480,41 @@ def usage_examples():
             print("   Agent not found in registry (run with protocol server)")
     except Exception as e:
         print(f"   Registry access: {e}")
+    
+    # Method 4: Dynamic toolbox integration
+    print("\n4. Dynamic Toolbox Integration:")
+    agent = create_basic_math_agent()
+    
+    # Load additional tools from toolbox
+    print("   Loading tools from toolbox...")
+    agent.load_tools_from_toolbox(category="math")
+    
+    # Generate a new tool on-the-fly
+    print("   Generating GCD tool dynamically...")
+    success = agent.generate_and_add_tool(
+        "Calculate greatest common divisor (GCD) of two numbers using Euclidean algorithm",
+        category="math"
+    )
+    if success:
+        print("   ✅ Tool generated and added!")
+        print(f"   Agent now has {len(agent.list_tools())} tools")
+    
+    # Method 5: Using toolbox directly
+    print("\n5. Direct Toolbox Usage:")
+    toolbox = get_toolbox()
+    
+    # Generate a math tool
+    success, message, tool = generate_tool(
+        "Calculate factorial using iteration with proper error handling",
+        category="math"
+    )
+    
+    if success:
+        print(f"   ✅ {message}")
+        print(f"   Tool name: {tool.name}")
+        # Add to agent
+        agent.add_tool(tool)
+        print(f"   Added to agent. Total tools: {len(agent.list_tools())}")
 
 
 if __name__ == "__main__":
