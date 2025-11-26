@@ -455,8 +455,9 @@ class ConversationMemoryStorage:
         # Generate embedding
         embedding = self.embeddings.embed_query(searchable_text)
         
-        # Create point
-        point_id = f"{session_id}_{timestamp.isoformat()}"
+        # Create point with UUID
+        import uuid
+        point_id = str(uuid.uuid4())
         payload = {
             "session_id": session_id,
             "message": message,

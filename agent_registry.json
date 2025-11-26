@@ -1,0 +1,52 @@
+{
+  "ultimate_math": {},
+  "math_discovery": {},
+  "ultimate_coding": {
+    "1.0.0": {
+      "name": "ultimate_coding",
+      "version": "1.0.0",
+      "description": "Coding agent for file editing, project management, and development tasks with safety controls",
+      "domain": "software_development",
+      "category": "specialist",
+      "system_prompt": "",
+      "model_name": "openai/gpt-oss-120b",
+      "temperature": 0.0,
+      "tools": [],
+      "commands": [],
+      "author": "LangChain Agent Base",
+      "created_at": "2025-11-26T02:21:13.075586",
+      "updated_at": "2025-11-26T02:21:13.075586",
+      "status": "production",
+      "class_path": "coding_agent.UltimateCodingAgent",
+      "dependencies": [],
+      "config_hash": "885573da5f6a13a7",
+      "performance_metrics": {},
+      "usage_stats": {},
+      "extends": null,
+      "compatible_with": []
+    },
+    "2.0.0": {
+      "name": "ultimate_coding",
+      "version": "2.0.0",
+      "description": "Coding agent with memory, RAG, file operations, and intelligent context management",
+      "domain": "software_development",
+      "category": "specialist",
+      "system_prompt": "",
+      "model_name": "openai/gpt-oss-120b",
+      "temperature": 0.0,
+      "tools": [],
+      "commands": [],
+      "author": "LangChain Agent Base",
+      "created_at": "2025-11-26T04:28:47.681161",
+      "updated_at": "2025-11-26T04:28:47.681161",
+      "status": "production",
+      "class_path": "coding_agent.UltimateCodingAgent",
+      "dependencies": [],
+      "config_hash": "885573da5f6a13a7",
+      "performance_metrics": {},
+      "usage_stats": {},
+      "extends": null,
+      "compatible_with": []
+    }
+  }
+}

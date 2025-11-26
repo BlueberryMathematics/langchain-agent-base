@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Theme Calculator</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #121212;
+      color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      width: 320px;
+    }
+
+    #display {
+      width: 100%;
+      height: 50px;
+      font-size: 1.8rem;
+      text-align: right;
+      padding: 0 10px;
+      margin-bottom: 15px;
+      border: 2px solid #555;
+      border-radius: 6px;
+      background: #2c2c2c;
+      color: #fff;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .buttons button {
+      font-size: 1.2rem;
+      padding: 15px;
+      border: none;
+      border-radius: 6px;
+      background: #333;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .buttons button:hover {
+      background: #444;
+    }
+
+    .buttons button.operator {
+      background: #ff9800;
+    }
+
+    .buttons button.operator:hover {
+      background: #e68900;
+    }
+
+    .buttons button.equal {
+      background: #4caf50;
+      grid-column: span 2;
+    }
+
+    .buttons button.equal:hover {
+      background: #43a047;
+    }
+
+    .buttons button.clear {
+      background: #f44336;
+    }
+
+    .buttons button.clear:hover {
+      background: #e53935;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" readonly placeholder="0">
+    <div class="buttons">
+      <button class="clear">C</button>
+      <button class="operator">(</button>
+      <button class="operator">)</button>
+      <button class="operator">/</button>
+
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button class="operator">*</button>
+
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button class="operator">-</button>
+
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button class="operator">+</button>
+
+      <button>0</button>
+      <button>.</button>
+      <button class="equal">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    const buttons = document.querySelectorAll('.buttons button');
+
+    function appendToDisplay(char) {
+      if (display.value === '0' && char !== '.') {
+        display.value = char;
+      } else {
+        display.value += char;
+      }
+    }
+
+    function clearDisplay() {
+      display.value = '';
+    }
+
+    function evaluateExpression() {
+      try {
+        const sanitized = display.value.replace(/([+\-*/]){2,}/g, '$1');
+        const result = Function(`'use strict'; return (${sanitized})`)();
+        display.value = Number.isFinite(result) ? result : 'Error';
+      } catch {
+        display.value = 'Error';
+      }
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const txt = btn.textContent.trim();
+        if (btn.classList.contains('clear')) {
+          clearDisplay();
+        } else if (btn.classList.contains('equal')) {
+          evaluateExpression();
+        } else {
+          appendToDisplay(txt);
+        }
+      });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key >= '0' && e.key <= '9' || '.+-*/()'.includes(e.key)) {
+        e.preventDefault();
+        appendToDisplay(e.key);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        evaluateExpression();
+      } else if (e.key === 'Backspace') {
+        e.preventDefault();
+        display.value = display.value.slice(0, -1);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        clearDisplay();
+      }
+    });
+  </script>
+</body>
+</html>

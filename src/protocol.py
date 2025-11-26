@@ -132,7 +132,10 @@ class AgentCard:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'AgentCard':
         """Create AgentCard from dictionary."""
-        return cls(**data)
+        # Remove config_hash if present (it's calculated in __post_init__)
+        data_copy = data.copy()
+        data_copy.pop('config_hash', None)
+        return cls(**data_copy)
     
     def to_json(self) -> str:
         """Serialize to JSON string."""

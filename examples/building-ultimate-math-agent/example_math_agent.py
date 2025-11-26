@@ -131,8 +131,7 @@ def prime_factorization(number: int) -> str:
     category="specialist",
     description="Ultimate mathematical assistant with calculus, algebra, number theory, and statistics",
     author="Your Name Here",
-    status=AgentStatus.PRODUCTION,
-    tags=["math", "calculus", "algebra", "statistics", "number-theory"]
+    status=AgentStatus.PRODUCTION
 )
 class UltimateMathAgent(Agent):
     """
