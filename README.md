@@ -149,6 +149,82 @@ agent.generate_and_add_tool(
 )
 ```
 
+## 🌟 **Featured Examples**
+
+### 🔬 **Ultimate Math Agent** - Mathematical Discovery & Analysis
+
+A sophisticated mathematical agent with LaTeX parsing, infinite series analysis, and pattern discovery.
+
+**Key Features:**
+- 📐 LaTeX expression parsing and ingestion
+- ∞ Infinite series verification and discovery
+- 🔍 Pattern recognition in sequences
+- 📚 RAG knowledge base for mathematical formulas
+- 🧮 Custom calculus and number theory tools
+
+**Quick Start:**
+```bash
+# Basic usage
+python examples/building-ultimate-math-agent/quick_start.py
+
+# Interactive agent
+from examples.building_ultimate_math_agent.math_discovery_agent import create_math_discovery_agent
+agent = create_math_discovery_agent(enable_memory=True)
+agent.chat("What is the sum of 1/n² from n=1 to infinity?")
+```
+
+**Documentation:**
+- [📖 Complete Guide](examples/building-ultimate-math-agent/README.md)
+- [💡 Simple Explanation](examples/building-ultimate-math-agent/SIMPLE-EXPLANATION.md)
+- [🏗️ Architecture](examples/building-ultimate-math-agent/ARCHITECTURE.md)
+
+---
+
+### 💻 **Ultimate Coding Agent** - Production-Ready Development Assistant
+
+An intelligent coding assistant with file operations, safety controls, and approval workflows for secure project development.
+
+**Key Features:**
+- 📂 Smart file tree navigation (excludes __pycache__, .venv)
+- ✏️ Intelligent code editing with minimal diffs
+- 🔒 Project directory locking for security
+- 👤 User approval workflow for all file operations
+- 💻 Safe terminal command execution
+- 🧠 Persistent memory across coding sessions
+- 📚 RAG support for project documentation
+
+**Quick Start:**
+```bash
+# Start interactive CLI
+python examples/building-ultimate-coding-agent/cli.py /path/to/your/project
+
+# With memory and custom session
+python examples/building-ultimate-coding-agent/cli.py ./my_project --session feature_xyz
+
+# Programmatic usage
+from examples.building_ultimate_coding_agent.coding_agent import create_coding_agent
+agent = create_coding_agent(project_directory="./my_project", enable_memory=True)
+agent.chat("Create a new module for user authentication with login and logout functions")
+```
+
+**Documentation:**
+- [📖 Complete Guide](examples/building-ultimate-coding-agent/README.md)
+- [🚀 Quick Start](examples/building-ultimate-coding-agent/QUICKSTART.md)
+- [🧠 Memory & RAG Guide](examples/building-ultimate-coding-agent/MEMORY_AND_RAG_GUIDE.md)
+- [📝 Changelog v2](examples/building-ultimate-coding-agent/CHANGELOG_V2.md)
+
+**CLI Commands:**
+```bash
+tree              # Show project file structure
+upload <file>     # Add reference file to knowledge base
+references        # List all uploaded reference files
+summary           # Show conversation statistics
+context           # View context usage and token limits
+quit/exit         # Exit the CLI
+```
+
+---
+
 ## 📁 **Complete Project Structure**
 
 ```
@@ -168,17 +244,29 @@ langchain-agent-base/
 │   └── contributing.md               # Community contribution guidelines
 │
 ├── 🧪 examples/                      # Production-ready examples and patterns
-│   ├── building-ultimate-math-agent/ # Complete tutorial: Build custom agents from scratch ⭐ NEW
-│   │   ├── README.md                 # Comprehensive guide with step-by-step instructions
-│   │   ├── SIMPLE-EXPLANATION.md     # Beginner-friendly overview with mental models
-│   │   ├── ARCHITECTURE.md           # Visual system diagrams and data flow
-│   │   ├── example_calculus_tools.py # Working tool implementations
-│   │   ├── example_math_agent.py     # Complete agent example
-│   │   └── quick_start.py            # Automated project setup script
-│   ├── math_agent_evolution.py       # Complete agent evolution (v1.0→v4.0) with versioning
-│   ├── protocol_usage.py             # Protocol system demonstration with custom agents
-│   ├── unified_system_demo.py        # Full system integration with memory and RAG
-│   └── README.md                     # Examples guide with learning path
+│   │
+│   ├── 🔬 building-ultimate-math-agent/  # Mathematical Discovery Agent ⭐ FEATURED
+│   │   ├── README.md                      # Complete guide with LaTeX parsing & series verification
+│   │   ├── math_discovery_agent.py        # Full agent: pattern discovery, infinite series analysis
+│   │   ├── example_math_agent.py          # Basic math agent with custom tools
+│   │   ├── quick_start.py                 # Get started in 30 seconds
+│   │   ├── SIMPLE-EXPLANATION.md          # Beginner-friendly mental models
+│   │   ├── ARCHITECTURE.md                # System design and data flow diagrams
+│   │   └── example_calculus_tools.py      # Custom calculus tools implementation
+│   │
+│   ├── 💻 building-ultimate-coding-agent/ # Production Coding Assistant ⭐ FEATURED
+│   │   ├── README.md                      # Complete feature documentation & safety controls
+│   │   ├── coding_agent.py                # Full agent: file ops, approval workflows, memory
+│   │   ├── cli.py                         # Interactive CLI: python cli.py /path/to/project
+│   │   ├── QUICKSTART.md                  # Usage examples and CLI commands
+│   │   ├── MEMORY_AND_RAG_GUIDE.md        # Advanced memory & RAG features
+│   │   ├── CHANGELOG_V2.md                # Version history and updates
+│   │   └── V2_SUMMARY.md                  # v2.0 feature summary
+│   │
+│   ├── math_agent_evolution.py        # Complete agent evolution (v1.0→v4.0) with versioning
+│   ├── protocol_usage.py              # Protocol system demonstration with custom agents
+│   ├── unified_system_demo.py         # Full system integration with memory and RAG
+│   └── README.md                      # Examples guide with learning path
 │
 ├── 📖 guide/                         # Educational notebooks and tutorials
 │   ├── Using LangChain 1.0.ipynb     # Step-by-step "How to build" tutorial from scratch
@@ -246,8 +334,27 @@ langchain-agent-base/
 - **[📓 Agent Usage Examples.ipynb](guide/Agent%20Usage%20Examples.ipynb)** - **"How to Use"**: Production guide for the pre-built `src/` library with real-world patterns
 - **[⚙️ agent.py](guide/agent.py)** - Tutorial compatibility layer bridging educational concepts with production code
 
-### 🧪 **Production Examples** (`examples/` directory)  
-- **[🎓 Building Ultimate Math Agent](examples/building-ultimate-math-agent/)** - Complete end-to-end tutorial for building custom agents in your own projects ⭐ NEW
+### 🧪 **Production Examples** (`examples/` directory)
+
+#### 🎓 **Ultimate Agent Tutorials** ⭐ FEATURED
+- **[🔬 Building Ultimate Math Agent](examples/building-ultimate-math-agent/)** - Complete mathematical agent with LaTeX parsing, series verification, and pattern discovery
+  - **[📖 README](examples/building-ultimate-math-agent/README.md)** - Comprehensive guide with architecture and features
+  - **[🎯 Quick Start](examples/building-ultimate-math-agent/quick_start.py)** - Get started in 30 seconds
+  - **[💡 Simple Explanation](examples/building-ultimate-math-agent/SIMPLE-EXPLANATION.md)** - Beginner-friendly overview
+  - **[🏗️ Architecture](examples/building-ultimate-math-agent/ARCHITECTURE.md)** - System design and data flow
+  - **[🔧 Example Tools](examples/building-ultimate-math-agent/example_calculus_tools.py)** - Custom calculus tools
+  - **[🧮 Math Discovery Agent](examples/building-ultimate-math-agent/math_discovery_agent.py)** - Full agent implementation
+
+- **[💻 Building Ultimate Coding Agent](examples/building-ultimate-coding-agent/)** - Production-ready coding assistant with file operations, safety controls, and approval workflows
+  - **[📖 README](examples/building-ultimate-coding-agent/README.md)** - Complete feature documentation
+  - **[🚀 Quick Start](examples/building-ultimate-coding-agent/QUICKSTART.md)** - Usage examples and CLI commands
+  - **[🧠 Memory & RAG Guide](examples/building-ultimate-coding-agent/MEMORY_AND_RAG_GUIDE.md)** - Advanced memory features
+  - **[📝 Changelog v2](examples/building-ultimate-coding-agent/CHANGELOG_V2.md)** - Version history and updates
+  - **[⚙️ CLI Tool](examples/building-ultimate-coding-agent/cli.py)** - Interactive coding assistant
+  - **[🤖 Coding Agent](examples/building-ultimate-coding-agent/coding_agent.py)** - Full agent implementation
+  - **Example Usage**: `python examples/building-ultimate-coding-agent/cli.py /path/to/project`
+
+#### 🧮 **Additional Examples**
 - **[🧮 Math Agent Evolution](examples/math_agent_evolution.py)** - Complete v1.0→v4.0 progression with versioning and capability enhancement
 - **[🌐 Protocol System Usage](examples/protocol_usage.py)** - Custom agent registration, API generation, and discovery patterns
 - **[🔗 Unified System Demo](examples/unified_system_demo.py)** - Memory, RAG, and multi-agent integration showcase
