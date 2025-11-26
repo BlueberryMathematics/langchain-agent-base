@@ -33,8 +33,14 @@ A specialized AI agent for software development with memory, RAG, safety control
 ### Interactive CLI Mode (Recommended)
 
 ```bash
-# With memory enabled (default)
+# Basic usage - start the coding agent in a project directory
 python examples/building-ultimate-coding-agent/cli.py /path/to/your/project
+
+# Example - using absolute paths (Windows)
+python M:\_tools\langchain-agent-base\examples\building-ultimate-coding-agent\cli.py M:\_tools\langchain-agent-base\tests\test_coding_project_2
+
+# From activated virtual environment
+(.venv) PS M:\_tools\langchain-agent-base> python examples\building-ultimate-coding-agent\cli.py tests\test_coding_project_2
 
 # Without memory
 python examples/building-ultimate-coding-agent/cli.py /path/to/your/project --no-memory
