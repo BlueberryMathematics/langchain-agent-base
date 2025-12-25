@@ -1,0 +1,69 @@
+[project]
+name = "langchain-agent-base"
+version = "1.0.0"
+description = "Production-ready AI agents with LangChain 1.0 and automatic API generation"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "LangChain Agent Base Contributors"}
+]
+license = {text = "Apache-2.0"}
+keywords = ["langchain", "agents", "ai", "groq", "fastapi", "protocol"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+
+dependencies = [
+    # Core LangChain dependencies
+    "langchain>=1.0.8",
+    "langgraph>=1.0.3",
+    "langsmith>=0.4.43",
+    "langchain-community>=0.4.1",
+    "langchain-groq>=0.2.0",
+    "groq>=0.11.0",
+    "langchain-huggingface>=0.1.0",
+    
+    # Protocol system dependencies
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "pydantic>=2.0.0",
+    "semver>=3.0.0",
+    
+    # Storage and retrieval
+    "qdrant-client>=1.16.0",
+    "langchain-qdrant>=1.1.0",
+    "sentence-transformers>=2.2.2",
+    
+    # Document processing
+    "beautifulsoup4>=4.14.2",
+    "pymupdf>=1.24.0",
+    
+    # Development and examples
+    "jupyter>=1.0.0",
+    "langgraph-cli[inmem]>=0.4.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0", 
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/BlueberryMathematician/langchain-agent-base"
+Repository = "https://github.com/BlueberryMathematician/langchain-agent-base"
+Documentation = "https://github.com/BlueberryMathematician/langchain-agent-base/tree/main/docs"
+Issues = "https://github.com/BlueberryMathematician/langchain-agent-base/issues"
+
+[project.scripts]
+langchain-agent-base = "main:main"
