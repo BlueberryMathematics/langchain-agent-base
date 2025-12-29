@@ -132,6 +132,35 @@ def matrix_operations(operation: str, matrix_a: str, matrix_b: str = None) -> st
     except Exception as e:
         return f"Error in matrix operation: {str(e)}"
 
+# My contribution to the tools.py file
+@tool
+def is_prime(n: int) -> str:
+    """Check if a number is prime.
+    
+    Args:
+        n: The number to check
+        
+    Returns:
+        A message indicating whether the number is prime
+    """
+    if n < 2:
+        return f"{n} is not prime (must be >= 2)"
+    
+    if n == 2:
+        return f"{n} is prime (the only even prime!)"
+    
+    if n % 2 == 0:
+        return f"{n} is not prime (divisible by 2)"
+    
+    # Check odd divisors up to sqrt(n)
+    import math
+    for i in range(3, int(math.sqrt(n)) + 1, 2):
+        if n % i == 0:
+            return f"{n} is not prime (divisible by {i})"
+    
+    return f"{n} is prime! "
+
+
 
 # ============================================================================
 # SCIENCE TOOLS
